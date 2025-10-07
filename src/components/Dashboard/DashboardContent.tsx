@@ -11,7 +11,6 @@ import GVFWLRCharts from './GVFWLRCharts';
 import ProductionMap from './ProductionMap';
 import FlowRateCharts from './FlowRateCharts';
 import FractionsChart from './FractionsChart';
-import UserProfile from './UserProfile';
 import { Calendar, ChevronDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -450,15 +449,19 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
             </div>
           </div>
 
-          {/* User Profile and Production Map */}
-          <div className="grid grid-cols-1 gap-4">
-            <div className="lg:hidden">
-              <UserProfile />
-            </div>
+          {/* Production Map */}
+          <div className="mt-2">
             <ProductionMap
               selectedHierarchy={selectedHierarchy}
               selectedDevice={selectedDevice}
             />
+          </div>
+
+          {/* Version Info */}
+          <div className={`text-center py-4 text-xs ${
+            theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+          }`}>
+            Version 1.0.0
           </div>
         </>
       )}

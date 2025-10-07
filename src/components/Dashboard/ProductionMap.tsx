@@ -333,18 +333,18 @@ const ProductionMap: React.FC<ProductionMapProps> = ({
       }`}
     >
       <div
-        className={`flex flex-col md:flex-row md:items-center justify-between p-6 border-b ${
+        className={`flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6 border-b ${
           theme === 'dark' ? 'border-[#b4c9e37d]' : 'border-gray-200'
         }`}
       >
         <h2
-          className={`text-xl font-medium ${
+          className={`text-lg md:text-xl font-medium ${
             theme === 'dark' ? 'text-[#fff]' : 'text-[#0f0f0f]'
           }`}
         >
           {selectedHierarchy && selectedHierarchy.id !== selectedHierarchy.name
             ? `${selectedHierarchy.name} - Device Locations`
-            : 'Production Map - All Devices'}
+            : 'Production Map'}
         </h2>
         <div className="flex md:items-center justify-end gap-4  mt-4 md:mt-0">
           <div className="flex items-center gap-2">
