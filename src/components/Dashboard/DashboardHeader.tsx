@@ -104,84 +104,129 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
   return (
     <header
-      className={`w-full h-20 px-4 md:px-6 flex items-center justify-between border-b flex-shrink-0 ${
+      className={`w-full flex-shrink-0 border-b ${
         theme === 'dark' ? 'bg-[#121429] border-none' : 'bg-white border-[#ececec]'
       }`}
     >
-      {/* Left group: Mobile menu + Logo (in curved rectangle) + Desktop nav */}
-      <div className="flex items-center gap-4 md:gap-6 lg:gap-8">
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={toggleSidebar}
-          className={`md:hidden flex items-center justify-center transition-colors ${
-            theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-[#555758] hover:text-gray-900'
-          }`}
-        >
-          {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+      {/* Top Row: Menu icon (mobile) + Logo (desktop) + Right controls */}
+      <div className="h-16 md:h-20 px-4 md:px-6 flex items-center justify-between">
+        {/* Left: Menu icon (mobile only) + Logo (desktop only) */}
+        <div className="flex items-center gap-4 md:gap-6 lg:gap-8">
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={toggleSidebar}
+            className={`md:hidden flex items-center justify-center transition-colors ${
+              theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-[#555758] hover:text-gray-900'
+            }`}
+            aria-label="Toggle menu"
+          >
+            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
 
-        {/* Logo inside curved rectangle */}
-        <div
-          className={`flex items-center rounded-2xl p-1.5 ${
-            theme === 'dark' ? 'bg-[#101428]/60' : 'bg-white shadow-sm border border-[#ececec]'
-          }`}
-          style={{ paddingLeft: 8, paddingRight: 12 }}
-        >
-          <img
-            src={theme === 'dark' ? logoSrcDark : logoSrcLight}
-            alt="Saher Logo"
-            className="h-8 w-auto transition-all duration-300"
-          />
+          {/* Logo inside curved rectangle - hidden on mobile */}
+          <div
+            className={`hidden md:flex items-center rounded-2xl p-1.5 ${
+              theme === 'dark' ? 'bg-[#101428]/60' : 'bg-white shadow-sm border border-[#ececec]'
+            }`}
+            style={{ paddingLeft: 8, paddingRight: 12 }}
+          >
+            <img
+              src={theme === 'dark' ? logoSrcDark : logoSrcLight}
+              alt="Saher Logo"
+              className="h-8 w-auto transition-all duration-300"
+            />
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav
+            ref={desktopNavRef as any}
+            className={`hidden lg:flex relative items-center rounded-full h-11 p-0.5 overflow-hidden lg:ml-10 ${
+              theme === 'dark' ? 'bg-[#162345]' : 'bg-white shadow-sm border border-[#ececec]'
+            }`}
+            aria-label="Primary navigation"
+          >
+            <div
+              aria-hidden
+              className={`absolute rounded-full transition-all duration-250 ease-in-out pointer-events-none ${
+                theme === 'dark' ? 'bg-[#6656F5]' : 'bg-[#F97316]'
+              }`}
+              style={{
+                left: sliderStyle.left,
+                width: sliderStyle.width,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                height: 'calc(100% - 8px)',
+              }}
+            />
+
+            {navigationItems.map((item) => {
+              const isActive = activeTab === item.label;
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => setActiveTab(item.label)}
+                  data-active={isActive ? 'true' : 'false'}
+                  className={`relative z-10 h-9 px-6 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-300 whitespace-nowrap ${
+                    isActive
+                      ? 'text-white'
+                      : theme === 'dark'
+                      ? 'text-gray-400 hover:text-gray-200'
+                      : 'text-[#555758] hover:text-gray-900'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Desktop Navigation - now uses same background pill as mobile */}
-        <nav
-          ref={desktopNavRef as any}
-          className={`hidden lg:flex relative items-center rounded-full h-11 p-0.5 overflow-hidden lg:ml-10 ${
-            theme === 'dark' ? 'bg-[#162345]' : 'bg-white shadow-sm border border-[#ececec]'
-          }`}
-          aria-label="Primary navigation"
-        >
-          {/* desktop slider: vertically centered and sized to container */}
-          <div
-            aria-hidden
-            className={`absolute rounded-full transition-all duration-250 ease-in-out pointer-events-none ${
-              theme === 'dark' ? 'bg-[#6656F5]' : 'bg-[#F97316]'
+        {/* Right side: Theme toggle, notifications, user */}
+        <div className="flex items-center gap-2 md:gap-4">
+          <button
+            onClick={toggleTheme}
+            className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center transition-colors ${
+              theme === 'dark'
+                ? 'hover:bg-[#2b3168] bg-[#1D2147] text-gray-400 hover:text-gray-200'
+                : 'hover:bg-gray-100 bg-[#EAEAEA] text-[#555758] hover:text-gray-900'
             }`}
-            style={{
-              left: sliderStyle.left,
-              width: sliderStyle.width,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              height: 'calc(100% - 8px)', // slightly inset so it doesn't overflow
-            }}
-          />
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4 md:h-5 md:w-5" /> : <Moon className="h-4 w-4 md:h-5 md:w-5" />}
+          </button>
 
-          {navigationItems.map((item) => {
-            const isActive = activeTab === item.label;
-            return (
-              <button
-                key={item.label}
-                onClick={() => setActiveTab(item.label)}
-                data-active={isActive ? 'true' : 'false'}
-                className={`relative z-10 h-9 px-6 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-300 whitespace-nowrap ${
-                  isActive
-                    ? 'text-white'
-                    : theme === 'dark'
-                    ? 'text-gray-400 hover:text-gray-200'
-                    : 'text-[#555758] hover:text-gray-900'
-                }`}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+          <button
+            className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center relative transition-colors ${
+              theme === 'dark'
+                ? 'hover:bg-[#2b3168] bg-[#1D2147] text-gray-400 hover:text-gray-200'
+                : 'hover:bg-gray-100 bg-[#EAEAEA] text-[#555758] hover:text-gray-900'
+            }`}
+            aria-label="Notifications"
+          >
+            <Bell className="h-4 w-4 md:h-5 md:w-5" />
+            <div
+              className={`absolute -top-1 -right-1 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full ${
+                theme === 'dark' ? 'bg-[#6656F5]' : 'bg-[#F56C44]'
+              }`}
+            />
+          </button>
 
-        {/* Mobile Navigation: compact, same visual base */}
-        <nav
-          ref={mobileNavRef as any}
-          className={`flex lg:hidden relative items-center rounded-full h-10 p-0.5 overflow-hidden ${
+          <div className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-[#2b3168]' : 'bg-gray-200'}`}>
+            <UserIcon className={`h-4 w-4 md:h-5 md:w-5 ${theme === 'dark' ? 'text-gray-400' : 'text-[#555758]'}`} />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Row - below the top row */}
+      <nav
+        ref={mobileNavRef as any}
+        className={`lg:hidden w-full px-4 pb-3 flex justify-center ${
+          theme === 'dark' ? 'bg-[#121429]' : 'bg-white'
+        }`}
+        aria-label="Primary navigation"
+      >
+        <div
+          className={`relative inline-flex items-center rounded-full h-10 p-0.5 overflow-hidden ${
             theme === 'dark' ? 'bg-[#162345]' : 'bg-white shadow-sm border border-[#ececec]'
           }`}
         >
@@ -206,7 +251,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 key={item.label}
                 onClick={() => setActiveTab(item.label)}
                 data-active={isActive ? 'true' : 'false'}
-                className={`relative z-10 h-9 px-3 flex items-center justify-center rounded-full text-xs font-medium transition-colors duration-300 whitespace-nowrap ${
+                className={`relative z-10 h-9 px-5 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-300 whitespace-nowrap ${
                   isActive
                     ? 'text-white'
                     : theme === 'dark'
@@ -218,41 +263,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               </button>
             );
           })}
-        </nav>
-      </div>
-
-      {/* Right side: Theme toggle, notifications, user */}
-      <div className="flex items-center gap-2 md:gap-4">
-        <button
-          onClick={toggleTheme}
-          className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center transition-colors ${
-            theme === 'dark'
-              ? 'hover:bg-[#2b3168] bg-[#1D2147] text-gray-400 hover:text-gray-200'
-              : 'hover:bg-gray-100 bg-[#EAEAEA] text-[#555758] hover:text-gray-900'
-          }`}
-        >
-          {theme === 'dark' ? <Sun className="h-4 w-4 md:h-5 md:w-5" /> : <Moon className="h-4 w-4 md:h-5 md:w-5" />}
-        </button>
-
-        <button
-          className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center relative transition-colors ${
-            theme === 'dark'
-              ? 'hover:bg-[#2b3168] bg-[#1D2147] text-gray-400 hover:text-gray-200'
-              : 'hover:bg-gray-100 bg-[#EAEAEA] text-[#555758] hover:text-gray-900'
-          }`}
-        >
-          <Bell className="h-4 w-4 md:h-5 md:w-5" />
-          <div
-            className={`absolute -top-1 -right-1 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full ${
-              theme === 'dark' ? 'bg-[#6656F5]' : 'bg-[#F56C44]'
-            }`}
-          />
-        </button>
-
-        <div className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-[#2b3168]' : 'bg-gray-200'}`}>
-          <UserIcon className={`h-4 w-4 md:h-5 md:w-5 ${theme === 'dark' ? 'text-gray-400' : 'text-[#555758]'}`} />
         </div>
-      </div>
+      </nav>
     </header>
   );
 };
