@@ -220,14 +220,14 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       {/* Mobile Navigation Row - below the top row */}
       <nav
         ref={mobileNavRef as any}
-        className={`lg:hidden w-full px-4 pb-3 flex justify-center ${
+        className={`lg:hidden w-full px-4 pb-3 pt-1 flex justify-center ${
           theme === 'dark' ? 'bg-[#121429]' : 'bg-white'
         }`}
         aria-label="Primary navigation"
       >
         <div
-          className={`relative inline-flex items-center rounded-full h-10 p-0.5 overflow-hidden ${
-            theme === 'dark' ? 'bg-[#162345]' : 'bg-white shadow-sm border border-[#ececec]'
+          className={`relative inline-flex items-center rounded-full h-11 p-1 ${
+            theme === 'dark' ? 'bg-[#162345]' : 'bg-gray-100'
           }`}
         >
           <div
@@ -251,12 +251,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 key={item.label}
                 onClick={() => setActiveTab(item.label)}
                 data-active={isActive ? 'true' : 'false'}
-                className={`relative z-10 h-9 px-5 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-300 whitespace-nowrap ${
+                className={`relative z-10 h-9 px-6 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
                   isActive
-                    ? 'text-white'
+                    ? 'text-white font-semibold'
                     : theme === 'dark'
                     ? 'text-gray-400 hover:text-gray-200'
-                    : 'text-[#555758] hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 {item.label}
