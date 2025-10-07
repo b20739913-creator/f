@@ -37,8 +37,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     const activeBtn = container.querySelector<HTMLButtonElement>('button[data-active="true"]') || container.querySelector<HTMLButtonElement>('button');
     if (!activeBtn) return { left: 0, width: 0 };
     const rect = activeBtn.getBoundingClientRect();
-    const left = Math.max(2, rect.left - containerRect.left + 4);
-    const width = Math.max(24, rect.width - 8);
+    const left = rect.left - containerRect.left;
+    const width = rect.width;
     return { left, width };
   };
 
@@ -226,7 +226,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         aria-label="Primary navigation"
       >
         <div
-          className={`relative inline-flex items-center rounded-full h-11 p-1 ${
+          className={`relative inline-flex items-center rounded-full h-11 p-1 gap-0.5 ${
             theme === 'dark' ? 'bg-[#162345]' : 'bg-gray-100'
           }`}
         >
@@ -238,9 +238,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             style={{
               left: mobileSliderStyle.left,
               width: mobileSliderStyle.width,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              height: 'calc(100% - 8px)',
+              top: 4,
+              bottom: 4,
             }}
           />
 
@@ -251,7 +250,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 key={item.label}
                 onClick={() => setActiveTab(item.label)}
                 data-active={isActive ? 'true' : 'false'}
-                className={`relative z-10 h-9 px-6 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
+                className={`relative z-10 h-9 px-5 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
                   isActive
                     ? 'text-white font-semibold'
                     : theme === 'dark'
